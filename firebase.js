@@ -9,7 +9,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyAi-xmMx7iqdDnYcNf-sgTN5vScifc_DbY",
   authDomain: "health-prediction-system-908e8.firebaseapp.com",
   projectId: "health-prediction-system-908e8",
-  storageBucket: "health-prediction-system-908e8.firebasestorage.app",
+  storageBucket: "health-prediction-system-908e8.appspot.com",
   messagingSenderId: "439712227221",
   appId: "1:439712227221:web:0394ddb0d39055f558e09c",
   measurementId: "G-MPG01M4CGX"
