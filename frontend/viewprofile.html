@@ -1,1 +1,267 @@
-<!-- ...existing code from viewprofile.html... -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile | MultipleHealthPredict</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom right, #d9f2ff, #f8fcff);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 40px 0;
+      margin: 0;
+    }
+
+    .profile-container {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      width: 420px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #0077b6;
+      margin-bottom: 10px;
+    }
+
+    .info-box {
+      text-align: left;
+      margin-top: 20px;
+    }
+
+    .info-item {
+      background: #f3f8fc;
+      padding: 10px;
+      border-radius: 10px;
+      margin: 6px 0;
+      font-size: 15px;
+    }
+
+    .buttons {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .back-btn {
+      background-color: #0077b6;
+      color: white;
+    }
+
+    .history-btn {
+      background-color: #00b4d8;
+      color: white;
+    }
+
+    .logout-btn {
+      background-color: #ef233c;
+      color: white;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .history-section {
+      margin-top: 25px;
+      text-align: left;
+      background: #f5fbff;
+      padding: 15px;
+      border-radius: 12px;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+
+    .record {
+      border-bottom: 1px solid #ddd;
+      padding: 8px 0;
+    }
+
+    .record:last-child {
+      border-bottom: none;
+    }
+
+    .no-history {
+      text-align: center;
+      color: gray;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-container">
+    <h2>👤 My Profile</h2>
+
+    <div class="info-box" id="profileInfo">
+      <p>Loading profile...</p>
+    </div>
+
+    <div class="buttons">
+      <button class="back-btn" id="homeBtn">🏠 Home</button>
+      <button class="history-btn" id="loadHistoryBtn">📜 View History</button>
+      <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
+    </div>
+
+    <div class="history-section" id="historySection" style="display:none;">
+      <h3>📊 Prediction History</h3>
+      <div id="historyList" class="no-history">Loading...</div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { auth, db } from "./firebase.js";
+    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const profileInfo = document.getElementById("profileInfo");
+    const historySection = document.getElementById("historySection");
+    const historyList = document.getElementById("historyList");
+    const loadHistoryBtn = document.getElementById("loadHistoryBtn");
+    const homeBtn = document.getElementById("homeBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    let currentUser;
+
+    // Redirect to login if not signed in
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+      currentUser = user;
+      await loadProfile(user);
+    });
+
+    // Load user profile data
+    async function loadProfile(user) {
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        profileInfo.innerHTML = `
+          <div class="info-item"><strong>👤 Name:</strong> ${data.name || "N/A"}</div>
+          <div class="info-item"><strong>📧 Email:</strong> ${data.email || "N/A"}</div>
+          <div class="info-item"><strong>🎂 Age:</strong> ${data.age || "N/A"}</div>
+          <div class="info-item"><strong>⚥ Gender:</strong> ${data.gender || "N/A"}</div>
+          <div class="info-item"><strong>🩸 Blood Group:</strong> ${data.bloodGroup || "N/A"}</div>
+        `;
+      } else {
+        profileInfo.innerHTML = `<p>No profile found. <a href="profile.html">Create one here</a>.</p>`;
+      }
+    }
+
+    // Load combined history (symptom + report)
+    async function loadHistory() {
+      if (!currentUser) return;
+      historySection.style.display = "block";
+      historyList.innerHTML = `<p>Loading...</p>`;
+
+      const userId = currentUser.uid;
+      const symptomRef = collection(db, "users", userId, "symptomHistory");
+      const reportRef = collection(db, "users", userId, "reportHistory");
+
+      const [symptomSnap, reportSnap] = await Promise.all([
+        getDocs(symptomRef),
+        getDocs(reportRef)
+      ]);
+
+      const allRecords = [];
+
+      symptomSnap.forEach((doc) => {
+        const d = doc.data();
+        allRecords.push({
+          type: "🩺 Symptom Chat",
+          userInput: d.userInput || "",
+          botReply: d.botReply || "",
+          date: d.timestamp
+        });
+      });
+
+      reportSnap.forEach((doc) => {
+        const d = doc.data();
+        allRecords.push({
+          type: "📊 Report",
+          result: d.result || "",
+          date: d.timestamp
+        });
+      });
+
+      if (allRecords.length === 0) {
+        historyList.innerHTML = `<p class="no-history">No history available yet.</p>`;
+        return;
+      }
+
+      allRecords.sort((a, b) => (b.date?.seconds || 0) - (a.date?.seconds || 0));
+
+      // Expandable records
+      historyList.innerHTML = allRecords.map((r, i) => {
+        let shortPreview = r.type === "🩺 Symptom Chat"
+          ? (r.userInput?.split(" ").slice(0, 8).join(" ") + (r.userInput.split(" ").length > 8 ? "..." : ""))
+          : (r.result?.split(" ").slice(0, 8).join(" ") + (r.result.split(" ").length > 8 ? "..." : ""));
+
+        const fullDetail = r.type === "🩺 Symptom Chat"
+          ? `<strong>👤 You:</strong> ${r.userInput}<br><strong>🤖 Bot:</strong> ${r.botReply}`
+          : `<strong>📋 Result:</strong> ${r.result}`;
+
+        return `
+          <div class="record" id="record-${i}">
+            <strong>${r.type}</strong><br>
+            ${shortPreview}<br>
+            <small>${r.date ? new Date(r.date.seconds * 1000).toLocaleString() : "Unknown date"}</small>
+            <div class="full-detail" style="display:none; margin-top:8px; background:#eef7ff; padding:8px; border-radius:8px;">
+              ${fullDetail}
+            </div>
+            <button class="toggle-btn" style="margin-top:5px; background:#00b4d8; color:white; border:none; border-radius:6px; padding:5px 10px; cursor:pointer;">Show More</button>
+          </div>
+        `;
+      }).join("");
+
+      // Toggle details
+      document.querySelectorAll(".toggle-btn").forEach((btn, index) => {
+        btn.addEventListener("click", () => {
+          const detail = document.querySelector(`#record-${index} .full-detail`);
+          const isVisible = detail.style.display === "block";
+          detail.style.display = isVisible ? "none" : "block";
+          btn.textContent = isVisible ? "Show More" : "Show Less";
+        });
+      });
+    }
+
+    // Logout Functionality
+    logoutBtn.addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+        alert("You have been logged out successfully.");
+        window.location.href = "login.html";
+      } catch (error) {
+        console.error("Logout Error:", error);
+        alert("Error logging out. Please try again.");
+      }
+    });
+
+    // Other button actions
+    loadHistoryBtn.addEventListener("click", loadHistory);
+    homeBtn.addEventListener("click", () => window.location.href = "home.html");
+  </script>
+</body>
+</html>

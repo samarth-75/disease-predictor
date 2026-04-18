@@ -1,1 +1,119 @@
 <!-- ...existing code from valuebased.html... -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Disease Prediction from Reports</title>
+  <link rel="stylesheet" href="vb.css">
+</head>
+<body>
+  <div class="container">
+    <h2>🧪 Report-Based Disease Predictor</h2>
+    <p>Select the type of report you want to analyze, then enter your values.</p>
+
+    <!-- Report Type Dropdown -->
+    <label for="reportType"><strong>Select Report Type:</strong></label>
+    <select id="reportType" onchange="showForm()">
+      <option value="">-- Choose a Report --</option>
+      <option value="blood">Blood Test (CBC)</option>
+      <option value="diabetes">Diabetes Panel</option>
+      <option value="kidney">Kidney Function Test</option>
+      <option value="liver">Liver Function Test</option>
+      <option value="thyroid">Thyroid Profile</option>
+      <option value="lipid">Lipid Profile</option>
+    </select>
+
+    <!-- Blood Test (CBC) -->
+    <div id="blood" class="reportForm hidden">
+      <h3>Blood Test (CBC)</h3>
+      <label>Age: <input type="number" id="cbcAge"></label>
+      <label>Gender: 
+        <select id="cbcGender">
+          <option value="">--Select--</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="child">Child</option>
+        </select>
+      </label>
+      <label>Hemoglobin (g/dL): <input type="number" step="0.1" id="hb"></label>
+      <label>WBC Count (/µL): <input type="number" id="wbc"></label>
+      <label>Platelets (/µL): <input type="number" id="platelets"></label>
+      <label>RBC (mill/µL): <input type="number" step="0.1" id="rbc"></label>
+      <label>Hematocrit (HCT %): <input type="number" step="0.1" id="hct"></label>
+      <label>MCV (fL): <input type="number" step="0.1" id="mcv"></label>
+      <label>MCH (pg): <input type="number" step="0.1" id="mch"></label>
+      <label>MCHC (g/dL): <input type="number" step="0.1" id="mchc"></label>
+      <button onclick="predictDisease('blood')">🔍 Predict</button>
+    </div>
+
+    <!-- Diabetes Panel -->
+    <div id="diabetes" class="reportForm hidden">
+      <h3>Diabetes Panel</h3>
+      <label>Fasting Blood Sugar (mg/dL): <input type="number" id="fasting"></label>
+      <label>Postprandial (PP) Blood Sugar (mg/dL): <input type="number" id="pp"></label>
+      <label>OGTT (mg/dL): <input type="number" id="ogtt"></label>
+      <label>HbA1c (%): <input type="number" step="0.1" id="hba1c"></label>
+      <button onclick="predictDisease('diabetes')">🔍 Predict</button>
+    </div>
+
+    <!-- Kidney Function Test -->
+    <div id="kidney" class="reportForm hidden">
+      <h3>Kidney Function Test</h3>
+      <label>Age: <input type="number" id="kidneyAge"></label>
+      <label>Creatinine (mg/dL): <input type="number" step="0.1" id="creatinine"></label>
+      <label>Urea (mg/dL): <input type="number" id="urea"></label>
+      <label>Sodium (mEq/L): <input type="number" step="0.1" id="sodium"></label>
+      <label>Potassium (mEq/L): <input type="number" step="0.1" id="potassium"></label>
+      <label>GFR (mL/min/1.73 m²): <input type="number" step="0.1" id="gfr"></label>
+      <label>Urine Albumin (mg/g): <input type="number" step="0.1" id="urineAlbumin"></label>
+      <button onclick="predictDisease('kidney')">🔍 Predict</button>
+    </div>
+
+    <!-- Liver Function Test -->
+    <div id="liver" class="reportForm hidden">
+      <h3>Liver Function Test</h3>
+      <label>ALT (U/L): <input type="number" id="alt"></label>
+      <label>AST (U/L): <input type="number" id="ast"></label>
+      <label>Bilirubin (mg/dL): <input type="number" step="0.1" id="bilirubin"></label>
+      <label>ALP (U/L): <input type="number" id="alp"></label>
+      <label>Albumin (g/dL): <input type="number" step="0.1" id="albumin"></label>
+      <label>GGT (U/L): <input type="number" step="0.1" id="ggt"></label>
+      <label>INR: <input type="number" step="0.1" id="inr"></label>
+      <button onclick="predictDisease('liver')">🔍 Predict</button>
+    </div>
+
+    <!-- Thyroid -->
+    <div id="thyroid" class="reportForm hidden">
+      <h3>Thyroid Profile</h3>
+      <label>Age: <input type="number" id="thyroidAge"></label>
+      <label>TSH (mIU/L): <input type="number" step="0.1" id="tsh"></label>
+      <label>Free T3 (pg/mL): <input type="number" step="0.1" id="ft3"></label>
+      <label>Free T4 (ng/dL): <input type="number" step="0.1" id="ft4"></label>
+      <button onclick="predictDisease('thyroid')">🔍 Predict</button>
+    </div>
+
+    <!-- Lipid -->
+    <div id="lipid" class="reportForm hidden">
+      <h3>Lipid Profile</h3>
+      <label>Age: <input type="number" id="lipidAge"></label>
+      <label>Total Cholesterol (mg/dL): <input type="number" id="cholesterol"></label>
+      <label>HDL (mg/dL): <input type="number" id="hdl"></label>
+      <label>LDL (mg/dL): <input type="number" id="ldl"></label>
+      <label>Triglycerides (mg/dL): <input type="number" id="triglycerides"></label>
+      <label>VLDL (mg/dL): <input type="number" step="0.1" id="vldl"></label>
+      <label>Non-HDL Cholesterol (mg/dL): <input type="number" step="0.1" id="nonhdl"></label>
+      <button onclick="predictDisease('lipid')">🔍 Predict</button>
+    </div>
+
+    <!-- Results -->
+    <div id="results"></div>
+  </div>
+
+  <div class="back-home">
+    <a href="home.html" class="btn-home">⬅ Back to Home</a>
+  </div>
+
+  <script type="module" src="vb.js"></script>
+</body>
+</html>

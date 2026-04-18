@@ -1,1 +1,87 @@
-/* ...existing code from vb.css... */
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: #f0f4f8;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  max-width: 800px;
+  margin: auto;
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+h2 {
+  text-align: center;
+  color: #1976d2;
+}
+
+label {
+  display: block;
+  margin: 8px 0;
+}
+
+input {
+  margin-left: 10px;
+  padding: 6px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+select {
+  padding: 6px;
+  border-radius: 6px;
+  margin: 10px 0 20px 0;
+}
+
+button {
+  display: block;
+  margin: 20px auto;
+  padding: 12px 20px;
+  background: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #0d47a1;
+}
+
+.hidden {
+  display: none;
+}
+
+#results {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.back-home {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.btn-home {
+  display: inline-block;
+  background: #1976d2;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.btn-home:hover {
+  background: #0d47a1;
+}
