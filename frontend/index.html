@@ -1,154 +1,50 @@
-<!-- filepath: c:\disease predictor\home.html -->
+<!-- filepath: c:\disease predictor\login.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Multiple Health Prediction System</title>
-  <link rel="stylesheet" href="home.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>Login | Health Prediction System</title>
+  <link rel="stylesheet" href="login.css">
+  <style>
+    .password-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
 </head>
 <body>
-  <!-- Navbar -->
-  <header class="navbar">
-    <div class="logo">🏥 MultipleHealthPredict</div>
-    <nav>
-      <a href="#hero">Home</a>
-      <a href="#about">About Us</a>
-      <a href="#features">Features</a>
-      <a href="#reports">Reports</a>
-    </nav>
+  <div class="login-container">
+    <h2>🔐 Health Prediction System</h2>
 
-    <!-- User Profile Info -->
-    <div class="user-info">
-      <span id="userName">Hello, User</span>
-      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" 
-           alt="Profile" id="profileIcon" class="profile-icon">
+    <input type="email" id="email" placeholder="Email" required>
+
+    <div class="password-wrapper">
+      <input type="password" id="password" placeholder="Password" required>
+      <span class="toggle-password" onclick="togglePassword('password', this)">👁</span>
     </div>
-  </header>
 
-  <!-- Hero Section -->
-  <section id="hero" class="hero">
-    <div class="overlay"></div>
-    <div class="hero-content">
-      <h1>AI-Powered Multiple Health Prediction</h1>
-      <p>Analyze your symptoms and lab reports with AI assistance.  
-         Based on WHO reference ranges & medical guidelines.</p>
-      <div class="hero-buttons">
-        <a href="symptom.html" class="btn">💬 Symptom Checker</a>
-        <a href="valuebased.html" class="btn secondary">🧪 Report Analysis</a>
-      </div>
+    <div id="confirmPasswordWrapper" style="display:none;" class="password-wrapper">
+      <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+      <span class="toggle-password" onclick="togglePassword('confirmPassword', this)">👁</span>
     </div>
-  </section>
+    
+    <button id="loginBtn">Login</button>
+    <button id="signupBtn" style="display: none;">Sign Up</button>
 
-  <!-- About Us -->
-  <section id="about" class="about">
-    <div class="about-container">
-      <div class="about-text">
-        <h2>ℹ️ About Us</h2>
-        <p>
-          MultipleHealthPredict is an AI-powered platform designed to assist individuals in understanding their health conditions better. Our system analyzes both <strong>symptom inputs</strong> and <strong>lab test reports</strong>, comparing values with <strong>WHO-approved reference ranges</strong> to provide preliminary predictions.
-        </p>
-        <p>
-          Our mission is to empower users with <strong>early health insights</strong>, helping them take timely action and make informed decisions. By integrating medical datasets and global health standards, we ensure that our results are reliable, accurate, and easy to interpret.
-        </p>
-        <p>
-          ⚠️ <strong>Disclaimer:</strong> This is a prototype tool meant for educational and awareness purposes. It is <u>not</u> a replacement for professional medical consultation. Always seek a doctor’s advice for diagnosis or treatment.
-        </p>
-      </div>
-      <div class="about-img">
-        <img src="https://cdn-icons-png.flaticon.com/512/2966/2966327.png" alt="Medical Illustration">
-      </div>
-    </div>
-  </section>
+    <p id="toggleForm">Don’t have an account? <a href="#">Sign Up</a></p>
 
-  <!-- Features Section -->
-  <section id="features" class="features">
-    <h2>✨ Why Choose Us?</h2>
-    <div class="feature-grid">
-      <div class="feature-card">
-        <h3>🤖 AI Predictions</h3>
-        <p>Smart algorithms trained on medical datasets provide insights instantly.</p>
-      </div>
-      <div class="feature-card">
-        <h3>📊 Report Analysis</h3>
-        <p>Supports multiple tests including CBC, LFT, KFT, Lipid Profile, and more.</p>
-      </div>
-      <div class="feature-card">
-        <h3>🌐 WHO Standards</h3>
-        <p>Values are validated against WHO & clinical ranges for accuracy.</p>
-      </div>
-      <div class="feature-card">
-        <h3>🔒 Privacy First</h3>
-        <p>We never store or share your health data. 100% secure and confidential.</p>
-      </div>
-    </div>
-  </section>
+    <p id="message"></p>
+  </div>
 
-  <!-- Reports Section -->
-  <section id="reports" class="reports-section">
-    <h2>📑 Reports We Support</h2>
-    <p class="intro-text">Upload values from these reports to get AI-powered predictions.</p>
-
-    <div class="report-grid">
-      <div class="report-card"><h3>🧬 CBC</h3><p>Detect anemia, infections, clotting issues.</p></div>
-      <div class="report-card"><h3>🩸 Diabetes</h3><p>Check sugar levels & HbA1c for diabetes risk.</p></div>
-      <div class="report-card"><h3>🧪 Kidney</h3><p>Creatinine, Urea, Electrolytes for kidney health.</p></div>
-      <div class="report-card"><h3>🧪 Liver</h3><p>ALT, AST, Bilirubin, Albumin for liver health.</p></div>
-      <div class="report-card"><h3>🦋 Thyroid</h3><p>TSH, T3, T4 for thyroid disorders.</p></div>
-      <div class="report-card"><h3>❤️ Lipid</h3><p>Cholesterol & Triglycerides for heart health.</p></div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <p>© 2025 HealthPredict | Built with ❤️ for Smart Healthcare</p>
-  </footer>
-
-  <!-- Firebase + User Handling -->
-  <script type="module">
-    import { auth, db } from "../firebase.js";
-    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-    const userNameEl = document.getElementById("userName");
-    const profileIcon = document.getElementById("profileIcon");
-
-    // Check if user is logged in
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          userNameEl.textContent = "Hi, " + data.name;
-        } else {
-          userNameEl.textContent = "Hi, User";
-        }
-      } else {
-        // if not logged in, go back to login
-        window.location.href = "login.html";
-      }
-    });
-
-   // Redirect to profile page
-profileIcon.addEventListener("click", async () => {
-  const user = auth.currentUser;
-  if (user) {
-    const docRef = doc(db, "users", user.uid);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      // If profile already exists → go to view page
-      window.location.href = "viewprofile.html";
-    } else {
-      // If profile not found → go to create profile page
-      window.location.href = "profile.html";
-    }
-  } else {
-    window.location.href = "login.html";
-  }
-});
-
-  </script>
+  <script type="module" src="login.js"></script>
 </body>
 </html>
