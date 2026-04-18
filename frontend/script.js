@@ -55,7 +55,7 @@ window.sendMessage = async function () {
     const prompt = `You are a helpful medical assistant.\n\nConversation so far:\n${conversation.map((c) => c.role + ": " + c.text).join("\n")}\n\nYour task:\n1. Explain possible causes of the user's symptoms in 2–3 short paragraphs.\n2. Be empathetic and clear.\n3. Advise if the user should see a doctor urgently or routinely.\n4. Ask exactly ONE follow-up question.`;
 
     // Call backend API (make sure backend is running)
-    const response = await fetch("http://localhost:5000/api/symptom-check", {
+    const response = await fetch("https://disease-predictor-i76z.onrender.com", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt })
