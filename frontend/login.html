@@ -1,0 +1,50 @@
+<!-- filepath: c:\disease predictor\login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Health Prediction System</title>
+  <link rel="stylesheet" href="login.css">
+  <style>
+    .password-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>🔐 Health Prediction System</h2>
+
+    <input type="email" id="email" placeholder="Email" required>
+
+    <div class="password-wrapper">
+      <input type="password" id="password" placeholder="Password" required>
+      <span class="toggle-password" onclick="togglePassword('password', this)">👁</span>
+    </div>
+
+    <div id="confirmPasswordWrapper" style="display:none;" class="password-wrapper">
+      <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+      <span class="toggle-password" onclick="togglePassword('confirmPassword', this)">👁</span>
+    </div>
+    
+    <button id="loginBtn">Login</button>
+    <button id="signupBtn" style="display: none;">Sign Up</button>
+
+    <p id="toggleForm">Don’t have an account? <a href="#">Sign Up</a></p>
+
+    <p id="message"></p>
+  </div>
+
+  <script type="module" src="login.js"></script>
+</body>
+</html>

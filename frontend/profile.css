@@ -1,0 +1,83 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #f4f7fb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.profile-container {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  width: 400px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #1976d2;
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px;
+  cursor: pointer;
+  border: none;
+  background: #eee;
+  font-weight: 600;
+  border-radius: 6px;
+  margin: 0 5px;
+  transition: 0.3s;
+}
+.tab-btn.active {
+  background: #1976d2;
+  color: white;
+}
+
+.tab-content.hidden {
+  display: none;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  background: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+button:hover {
+  background: #1258a8;
+}
+
+#historyList {
+  list-style: none;
+  padding: 0;
+}
+#historyList li {
+  background: #f1f1f1;
+  margin: 8px 0;
+  padding: 10px;
+  border-radius: 6px;
+}
